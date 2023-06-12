@@ -73,56 +73,31 @@ The `metaaf` package is relatively small, being limited to a dozen files which e
 
 To install the `metaaf` python package, you will need a working JAX install. You can set one up by following the official directions [here](https://github.com/google/jax#installation). Below is an example of the commands we use to setup a new conda environment called `metaenv` in which we install `metaaf` and any dependencies.
 
-#### GPU Setup
-
 ```{bash}
-### GPU
-# Install all the cuda and cudnn prerequisites
-conda create -yn metaenv python=3.7 &&
-conda install -yn metaenv cudatoolkit=11.1.1 -c pytorch -c conda-forge &&
-conda install -yn metaenv cudatoolkit-dev=11.1.1 -c pytorch -c conda-forge &&
-conda install -yn metaenv cudnn=8.2 -c nvidia -c pytorch -c anaconda -c conda-forge &&
-conda install -yn metaenv pytorch cpuonly -c pytorch -y
+wget https://repo.anaconda.com/miniconda/Miniconda3-py38_23.3.1-0-Linux-x86_64.sh
+sh Miniconda3-py38_23.3.1-0-Linux-x86_64.sh 
+conda create -yn metaenv python=3.8
 conda activate metaenv
-
-# Actually install jax
-# You may need to change the cuda/cudnn version numbers depending on your machine
-pip install jax[cuda11_cudnn82]==0.3.15 -f https://storage.googleapis.com/jax-releases/jax_releases.html  
-
-# Install Haiku
-pip install git+https://github.com/deepmind/dm-haiku@v0.0.8
-```
-
-#### CPU Setup
-
-```{bash}
-### CPU. x86 only
-conda create -yn metaenv python=3.7 && 
-conda install -yn metaenv pytorch torchvision torchaudio -c pytorch && 
-conda install -yn metaenv pytorch cpuonly -c pytorch -y
-conda activate metaenv
-
-# Actually install jax
-# You may need to change the cuda/cudnn version numbers depending on your machine
 pip install --upgrade pip
-pip install --upgrade "jax[cpu]"==0.3.15
-
-# Install Haiku
-pip install git+https://github.com/deepmind/dm-haiku@v0.0.8
-```
-
-Finally, with the prerequisites done, you can install `metaaf` by cloning the repo, moving into the base directory, and running `pip install -e ./`. This `pip install` adds the remaining dependencies. To run the demo notebook, you also need to:
-
-```{bash}
-# Add the conda env to your jupyter session
+pip install --upgrade "jax[cuda11_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+pip install git+https://github.com/deepmind/dm-haiku
+pip install optax
+pip install tensorflow-datasets
 conda install -yn metaenv ipykernel 
 ipython kernel install --user --name=metaenv
-
-# Install plotting
 pip install matplotlib
-
-# Install widgets for a progress bar
 pip install ipywidgets
+conda install -yn metaenv pytorch cpuonly -c pytorch -y
+git clone https://github.com/kodavatimahendra/MetaAF.git
+cd MetaAF
+pip install -e ./
+```
+### Cloning, Branching, and Pull Requests
+Do not push the folders like `__pycache__` by adding the following lines to your `.git/info/exclude` file:
+
+```{bash}
+__pycache__/
+metaaf.egg-info/
 ```
 
 ### Example Usage
